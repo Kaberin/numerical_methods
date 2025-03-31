@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 
-path = "F:/Programing/Python/Numerical methods/out.txt"
+path = "C:/Users/Vyacheslav/Desktop/numerical_methods/numerical_methods/out.txt"
 
 with open(path, "r") as file:
     lines = file.readlines()
