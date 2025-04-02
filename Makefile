@@ -7,3 +7,5 @@ newton_inter:
 	g++ ./lec6/newton_interpolator.cpp -o program.exe
 parametric:
 	g++ ./lec6/parametric.cpp -o program.exe
+approx:
+	g++ ./lec7/approximation.cpp -o program.exe
