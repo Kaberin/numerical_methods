@@ -1,22 +1,25 @@
+// Надолго тут застрял, но вроде разобрался
+
 #include <iostream>
 #include <cmath>
 #include <vector>
 #include <fstream>
 #include "../helpers/print_helper.h"
 #include "../lec2/SLE_solver.h"
-
-std::vector<double> operator*(std::vector<double> v, const std::vector<double> &v1)
-{
-    for (int i = 0; i < v.size(); i++)
-    {
-        v[i] *= v1[i];
-    }
-    return v;
-}
+#include "../helpers/vector_operations.h"
 
 double phi(double x, int k)
 {
     return pow(x, k);
+}
+
+std::vector<double> phi(std::vector<double> x, int k)
+{
+    for (auto &el : x)
+    {
+        el = pow(el, k);
+    }
+    return x;
 }
 /// @brief Предполагается что x [-1, 1]
 /// @param k Порядок phi
@@ -31,73 +34,15 @@ double Integrate(int k, int m)
     return 0;
 }
 
-double Integrate(const std::vector<double> &x, const std::vector<double> &u, int k)
+double Integrate(const std::vector<double> &x, const std::vector<double> u)
 {
-    int N = x.size() - 1; // Количество отрезков
+    int N = x.size();
     double integral = 0;
-    for (int n = 1; n <= N; n++)
+    for (int n = 1; n < N; n++)
     {
-        integral += (phi(x[n], k) * u[n] + phi(x[n - 1], k) * u[n - 1]) * (x[n] - x[n - 1]) / 2;
+        integral += (u[n] + u[n - 1]) * (x[n] - x[n - 1]) / 2;
     }
     return integral;
-}
-
-std::vector<double> operator-(std::vector<double> v, double d)
-{
-    for (auto &x : v)
-    {
-        x -= d;
-    }
-    return v;
-}
-std::vector<double> operator+(std::vector<double> v, double d)
-{
-    for (auto &x : v)
-    {
-        x += d;
-    }
-    return v;
-}
-std::vector<double> operator*(std::vector<double> v, double d)
-{
-    for (auto &x : v)
-    {
-        x *= d;
-    }
-    return v;
-}
-std::vector<double> operator/(std::vector<double> v, double d)
-{
-    for (auto &x : v)
-    {
-        x /= d;
-    }
-    return v;
-}
-
-double vec_max(const std::vector<double> &x)
-{
-    double max = (std::numeric_limits<double>::min)();
-    for (const auto &el : x)
-    {
-        if (el > max)
-        {
-            max = el;
-        }
-    }
-    return max;
-}
-double vec_min(const std::vector<double> &x)
-{
-    double min = (std::numeric_limits<double>::max)();
-    for (const auto &el : x)
-    {
-        if (el < min)
-        {
-            min = el;
-        }
-    }
-    return min;
 }
 
 void scale_x(double a, double b, std::vector<double> &x)
@@ -119,10 +64,10 @@ double Approximation(std::vector<double> &x, const std::vector<double> &u, int K
 
     for (int m = 0; m < K + 1; m++)
     {
-        D[m] = Integrate(x, u, m);
+        D[m] = Integrate(x, phi(x, m) * u);
         for (int k = 0; k < K + 1; k++)
         {
-            M[k][m] = Integrate(k, m);
+            M[k][m] = Integrate(x, phi(x, m) * phi(x, k));
         }
     }
 
@@ -165,14 +110,15 @@ int main()
     scale_x(a, b, x);
     int N = 100;
     std::vector<double> x_approx;
-    std::vector<double> u_approx(N, 0);
-    fill_vector(x_approx, -1, 1, N);
-    int K = 8;
-    for (int i = 0; i < 100; i++)
+    std::vector<double> u_approx(N + 1, 0);
+    fill_vector(x_approx, -1, 1, N + 1);
+    int K = 5;
+    for (int i = 0; i < N; i++)
     {
         double result = Approximation(x, u, K, x_approx[i]);
         u_approx[i] = result;
     }
+    u_approx[N] = Approximation(x, u, K, 1);
     scale_back(a, b, x);
     scale_back(a, b, x_approx);
     std::ofstream out{"out.txt"};
