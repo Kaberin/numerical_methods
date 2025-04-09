@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 
 
-path = "C:/Users/Vyacheslav/Desktop/numerical_methods/numerical_methods/out.txt"
+path = "out.txt"
 
 with open(path, "r") as file:
     lines = file.readlines()
@@ -27,7 +27,8 @@ for line in lines:
     elif key == "f(x_interpolated)":
         f_x_interpolated = values
 
-
+plt.xlim(0, 10)
+plt.ylim(0, 6)
 plt.plot(x, f_x, linestyle="none", marker="s", markersize=4, color="b")
 plt.plot(x_interpolated, f_x_interpolated)
 plt.show()
