@@ -8,4 +8,4 @@ newton_inter:
 parametric:
 	g++ ./lec6/parametric.cpp -o program.exe
 approx:
-	g++ ./lec7/approximation.cpp -o program.exe
+	g++ ./lec7/approximation.cpp ./lec2/SLE_solver.cpp -o program.exe

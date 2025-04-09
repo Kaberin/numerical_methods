@@ -12,7 +12,7 @@ std::ostream &operator<<(std::ostream &os, const std::vector<T> &v)
     for (auto &x : v)
     {
 
-        os << '\t' << x << "\n";
+        os << '\t' << x << "\t";
     }
     os << '\n';
     return os;
