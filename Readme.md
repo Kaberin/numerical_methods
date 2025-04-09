@@ -11,3 +11,6 @@
 
 Численные методы изучаю тут:
 [Ссылка на курс](https://www.youtube.com/playlist?list=PLcsjsqLLSfNCgrIHaYITHmakg0ql3kJDi) 
+
+
+<span style="color:red">На 09.04.25 в некоторых файлах полный бардак. Позже оформлю чтобы можно было разобраться</span>
