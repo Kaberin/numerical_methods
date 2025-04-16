@@ -1,7 +1,8 @@
 #include <iostream>
 #include <functional>
 #include <cmath>
-
+#include <vector>
+#include "../helpers/print_helper.h"
 double f(double x)
 {
     return (x - 6) * (x - 5) + x * x * x + 4 * x * x * x * x + x - 8;
@@ -94,15 +95,62 @@ double newton_min(std::function<double(double)> f, double eps)
     std::cout << "Не достигнута требуемая точность. *dies from cringe*";
     return x[n];
 }
+
+double f2(std::vector<double> _x)
+{
+    double res = 0;
+    double x = _x[0];
+    double y = _x[1];
+    double z = _x[2];
+    res = (x - 2) * (x - 2) + (y - 1) * (y - 1) + (z - 4) * (z - 4);
+    return res;
+}
+
+void coordinate_descent(std::vector<double> zero_approach)
+{
+    int n = -1;
+    double h = 0.01;
+    for (int k = 0; k < 10; k++)
+    {
+
+        for (int i = 0; i < zero_approach.size(); i++)
+        {
+            std::cout << "Minimizing x[" << i << "]\n";
+            double prev = f2(zero_approach);
+            std::cout << "Prev " << prev << '\n';
+            zero_approach[i] += h;
+            double curr = f2(zero_approach);
+            std::cout << "Curr " << prev << '\n';
+            if (curr > prev)
+            {
+                h *= n;
+                std::cout << h << '\n';
+            }
+            while (curr < prev)
+            {
+                zero_approach[i] += h;
+                prev = curr;
+                curr = f2(zero_approach);
+            }
+            h /= 2;
+            std::cout << "At iteration " << k << " x[" << i << "] = " << zero_approach[i] << '\n';
+        }
+    }
+
+    std::cout << std::setprecision(5) << std::fixed << zero_approach;
+}
+
 int main()
 {
-    const double pi = 3.1415926;
-    double res = minimize_gr(-3, 2 * pi, f);
-    std::cout << "Function min at " << res << '\n';
-    res = newton_min(f, 1e-9);
-    std::cout << "Function min at " << res << '\n';
+    // const double pi = 3.1415926;
+    // double res = minimize_gr(-3, 2 * pi, f);
+    // std::cout << "Function min at " << res << '\n';
+    // res = newton_min(f, 1e-9);
+    // std::cout << "Function min at " << res << '\n';
+
     // std::cout << differ_first(f, 1) << '\n';
     // std::cout << differ_second(f, 1) << '\n';
+    coordinate_descent({5, 6, 7});
 
     return 0;
 }
